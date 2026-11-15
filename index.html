@@ -1048,15 +1048,24 @@ footer.site div {
 .feed-card.on .feed-checkbox { background: var(--accent); border-color: var(--accent); }
 .feed-card.on .feed-checkbox::after { content: ""; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 2px; }
 
-/* Tablet Layout Overrides (768px to 1024px) */
+/* Definitive Tablet & iPad Fix (768px to 1024px) */
 @media (min-width: 768px) and (max-width: 1024px) {
   .hide-on-mobile { display: block !important; }
   .hide-on-desktop { display: none !important; }
+  
+  /* Stack the main content area */
   .shell { grid-template-columns: 1fr; margin-bottom: 2rem; }
+  
+  /* Move the sidebar to the bottom in a horizontal row */
   .side { flex-direction: row; flex-wrap: wrap; margin-top: 0.5rem; gap: 1.25rem; }
   .side .panel { flex: 1 1 300px; margin: 0; }
+  
+  /* Disable mobile modals on tablet */
   .m-modal-overlay { display: none !important; }
   #ph-comp-topic, #ph-comp-rss { display: block !important; }
+  
+  /* Force 2 columns to prevent the horizontal overflow on iPads */
+  .feed-grid { grid-template-columns: 1fr 1fr !important; }
 }
 	
 </style>
