@@ -1048,24 +1048,26 @@ footer.site div {
 .feed-card.on .feed-checkbox { background: var(--accent); border-color: var(--accent); }
 .feed-card.on .feed-checkbox::after { content: ""; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 2px; }
 
-/* Definitive Tablet & iPad Fix (768px to 1024px) */
+/* Strict iPad Pro and Tablet Override (up to 1024px) */
+@media (max-width: 1024px) {
+  /* Destroy the broken grid and stack sections vertically */
+  .shell { display: block !important; }
+  .maincol { width: 100% !important; margin-bottom: 2rem; }
+  
+  /* Stack the sidebar at the bottom horizontally */
+  .side { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 1rem; width: 100%; margin-top: 2rem; }
+  .side .panel { flex: 1 1 300px; }
+  
+  /* Lock the feed grid to 2 columns so it never overflows */
+  .feed-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
+}
+
+/* Disable the mobile-only modal UI on tablets */
 @media (min-width: 768px) and (max-width: 1024px) {
   .hide-on-mobile { display: block !important; }
   .hide-on-desktop { display: none !important; }
-  
-  /* Stack the main content area */
-  .shell { grid-template-columns: 1fr; margin-bottom: 2rem; }
-  
-  /* Move the sidebar to the bottom in a horizontal row */
-  .side { flex-direction: row; flex-wrap: wrap; margin-top: 0.5rem; gap: 1.25rem; }
-  .side .panel { flex: 1 1 300px; margin: 0; }
-  
-  /* Disable mobile modals on tablet */
   .m-modal-overlay { display: none !important; }
-  #ph-comp-topic, #ph-comp-rss { display: block !important; }
-  
-  /* Force 2 columns to prevent the horizontal overflow on iPads */
-  .feed-grid { grid-template-columns: 1fr 1fr !important; }
+  #ph-comp-topic, #ph-comp-rss, #ph-comp-filter, #ph-comp-guides { display: block !important; }
 }
 	
 </style>
