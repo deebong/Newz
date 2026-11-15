@@ -405,9 +405,9 @@ html[data-theme="dark"] .btn-primary {
 .showing { font-size: .82rem; color: var(--muted); margin: .4rem 0 .6rem; }
 
 /* Feeds Grid */
-.feed-grid { display: grid; gap: .7rem; }
-@media(min-width: 640px) { .feed-grid { grid-template-columns: 1fr 1fr; } }
-@media(min-width: 1024px) { .feed-grid { grid-template-columns: 1fr 1fr 1fr; } }
+.feed-grid { display: grid; gap: .7rem; min-width: 0; }
+@media(min-width: 640px) { .feed-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+@media(min-width: 1024px) { .feed-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); } }
 
 .feed-card {
   text-align: left;
@@ -420,6 +420,8 @@ html[data-theme="dark"] .btn-primary {
   flex-direction: column;
   gap: .55rem;
   min-height: 120px;
+  min-width: 0;
+  max-width: 100%;
   box-shadow: none;
   transition: border-color .12s ease, background-color .12s ease;
 }
@@ -429,7 +431,7 @@ html[data-theme="dark"] .btn-primary {
   background: var(--accent-soft);
 }
 
-.feed-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem; }
+.feed-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem; min-width: 0; }
 .feed-logo {
   display: grid;
   place-items: center;
@@ -449,6 +451,9 @@ html[data-theme="dark"] .btn-primary {
   font-size: .92rem;
   line-height: 1.25;
   letter-spacing: -0.015em;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .feed-desc {
   font-size: .76rem;
@@ -1048,18 +1053,28 @@ footer.site div {
 .feed-card.on .feed-checkbox { background: var(--accent); border-color: var(--accent); }
 .feed-card.on .feed-checkbox::after { content: ""; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 2px; }
 
-/* Strict iPad Pro and Tablet Override (up to 1024px) */
-@media (max-width: 1024px) {
-  /* Destroy the broken grid and stack sections vertically */
-  .shell { display: block !important; }
-  .maincol { width: 100% !important; margin-bottom: 2rem; }
-  
-  /* Stack the sidebar at the bottom horizontally */
-  .side { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 1rem; width: 100%; margin-top: 2rem; }
-  .side .panel { flex: 1 1 300px; }
-  
-  /* Lock the feed grid to 2 columns so it never overflows */
-  .feed-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
+/* Tablet layout: 768px - 899px (iPad portrait & similar).
+   Keep the native two-column shell (main column + right sidebar) so the
+   filters and tracker tools stay in place — no mobile modal, no sidebar row.
+   Feed grid is a single wide column so cards can never overflow. */
+@media (min-width: 768px) and (max-width: 899px) {
+  .shell { grid-template-columns: minmax(0, 1fr) 260px; }
+  .side { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+  .side .panel { min-width: 0; }
+  .feed-grid { grid-template-columns: minmax(0, 1fr); }
+  .feed-card, .feed-top, .feed-name { min-width: 0; }
+}
+
+/* Tablet layout: 900px - 1024px (iPad Pro 13" portrait at 1024px).
+   Two-column shell with a slightly narrower sidebar; the feed grid is
+   capped at two columns so it overrides the desktop 3-column rule at
+   exactly 1024px and cards never overflow the container. */
+@media (min-width: 900px) and (max-width: 1024px) {
+  .shell { grid-template-columns: minmax(0, 1fr) 260px; }
+  .side { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+  .side .panel { min-width: 0; }
+  .feed-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .feed-card, .feed-top, .feed-name { min-width: 0; }
 }
 
 /* Disable the mobile-only modal UI on tablets */
@@ -3532,5 +3547,5 @@ if(document.readyState !== 'loading'){ init(); }
 else { document.addEventListener('DOMContentLoaded', init); }
 })();
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5adcfd919ea8b19',t:'MTc5NDc0MTA1Mg=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5adcfd919ea8b19',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
