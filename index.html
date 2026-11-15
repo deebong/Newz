@@ -455,6 +455,18 @@ html[data-theme="dark"] .btn-primary {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+.feed-link {
+  font-size: .8rem;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 600;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+.feed-link:hover { text-decoration: underline; }
+button.feed-link { background: none; border: 0; padding: 0; margin: 0; font: inherit; cursor: pointer; }
 .feed-desc {
   font-size: .76rem;
   line-height: 1.4;
@@ -1286,7 +1298,7 @@ footer.site div {
               <span class="preview-meta" id="previewMeta">Rendering live preview...</span>
               <button type="button" id="reloadPreview" class="btn btn-small">↻ Reload preview</button>
             </div>
-            <iframe id="preview" title="Feed preview" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
+            <iframe id="preview" title="Feed preview" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
           </div>
         </section>
 
@@ -1684,6 +1696,7 @@ var BASE_RESET_CSS = [
   '.feed-section[data-hidden="true"], .feed-error[data-hidden="true"], .feed-loading[data-hidden="true"]{ display:none !important; }',
   '.feed-link{ font-size:.8rem; color:var(--accent); text-decoration:none; white-space:nowrap; font-weight:600; min-width:0; overflow-wrap:anywhere; word-break:break-all; }',
   '.feed-link:hover{ text-decoration:underline; }',
+  'button.feed-link{ background:none; border:0; padding:0; margin:0; font:inherit; cursor:pointer; }',
   '.item, .item-list, .item-grid, .item-compact, .item-masonry { min-width:0; max-width:100%; overflow-wrap:anywhere; word-break:break-word; }',
   '.item-title{ min-width:0; overflow-wrap:anywhere; word-break:break-word; hyphens:auto; }',
   '.item-desc{ min-width:0; overflow-wrap:anywhere; word-break:break-word; }',
@@ -1952,7 +1965,9 @@ var RENDERER = `
     head.appendChild(h('h2', { 'class': 'feed-name', text: (data && data.title) ? data.title : feed.title }));
     var src = (data && data.siteUrl) ? data.siteUrl : feed.url;
     if(src && /^https?:\\/\\//i.test(src)){
-      head.appendChild(h('a', { 'class': 'feed-link', href: src, target: '_blank', rel: 'noopener noreferrer', text: 'Visit source ↗' }));
+      var srcBtn = h('button', { 'type': 'button', 'class': 'feed-link', text: 'Visit source ↗' });
+      srcBtn.addEventListener('click', function(){ try { window.open(src, '_blank', 'noopener,noreferrer'); } catch(e){} });
+      head.appendChild(srcBtn);
     }
     sec.appendChild(head);
     if(cached && SNAPSHOT){
@@ -2152,6 +2167,7 @@ var RENDERER = `
       var iconSpan = h('span', { 'class': 'source-nav-icon' });
       if(domain){
         var img = h('img', { src: 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(domain) + '&sz=32', alt: '' });
+        img.onerror = function(){ iconSpan.textContent = (f.title || 'F').charAt(0).toUpperCase(); img.remove(); };
         iconSpan.appendChild(img);
       } else {
         iconSpan.textContent = (f.title || 'F').charAt(0).toUpperCase();
@@ -3547,5 +3563,5 @@ if(document.readyState !== 'loading'){ init(); }
 else { document.addEventListener('DOMContentLoaded', init); }
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5adcfd919ea8b19',t:'MTc5NDc0MTA1Mg=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5adcfd919ea8b19',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5ade744cd5d560f',t:'MTc5NDc0MjAxMQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5ade744cd5d560f',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
