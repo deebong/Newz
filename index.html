@@ -2930,6 +2930,11 @@ function buildReadme(cfg){
 }
 
 function buildFiles(cfg){
+  // Security measure: Do not export the private proxy to users' downloaded files
+  if (cfg.proxy === 'https://api.newz.in/?url=') {
+    cfg.proxy = 'https://api.allorigins.win/get?url=';
+  }
+  
   return {
     'index.html': buildIndexHtml(cfg),
     'feed.html': buildSingleHtml(cfg),
@@ -3187,6 +3192,10 @@ function downloadAll(){
 function doShare(){
   var cfg = getConfig();
   if(!cfg.feeds.length){ toast('Select at least one source first.'); return; }
+  // Security measure: Strip private proxy from generated share links
+  if (cfg.proxy === 'https://api.newz.in/?url=') {
+    cfg.proxy = 'https://api.allorigins.win/get?url=';
+  }
   var enc = encodeCfg(cfg);
   var base = String(location.href).split('#')[0];
   var link = base + '#c=' + enc;
